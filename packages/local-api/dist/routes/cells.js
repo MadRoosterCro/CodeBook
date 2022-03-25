@@ -27,7 +27,8 @@ const createCellsRouter = (filename, dir) => {
         }
         catch (err) {
             if (err.code === 'ENOENT') {
-                // Create file and create default cells
+                yield promises_1.default.writeFile(fullPath, '[]', 'utf-8');
+                res.send([]);
             }
             else {
                 throw err;
