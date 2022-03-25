@@ -12,11 +12,18 @@ export const createCellsRouter = (filename: string, dir: string) => {
   const fullPath = path.join(dir, filename);
 
   router.get('/cells', async (req, res) => {
-    // Make sure the cell storage file exists
-    // If the file doesn't exist, add in a default list of cells
-    // Read the file
-    // Parse the list of cells out of it
-    // Send the list of cells to browser
+    try {
+      // Read the file
+      const result = await fs.readFile(fullPath, { encoding: 'utf-8' });
+
+      res.send(JSON.parse(result));
+    } catch (err: any) {
+      if (err.code === 'ENOENT') {
+        // Create file and create default cells
+      } else {
+        throw err;
+      }
+    }
   });
 
   router.post('/cells', async (req, res) => {

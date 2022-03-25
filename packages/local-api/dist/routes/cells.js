@@ -20,11 +20,19 @@ const createCellsRouter = (filename, dir) => {
     const router = express_1.default.Router();
     const fullPath = path_1.default.join(dir, filename);
     router.get('/cells', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        // Make sure the cell storage file exists
-        // If the file doesn't exist, add in a default list of cells
-        // Read the file
-        // Parse the list of cells out of it
-        // Send the list of cells to browser
+        try {
+            // Read the file
+            const result = yield promises_1.default.readFile(fullPath, { encoding: 'utf-8' });
+            res.send(JSON.parse(result));
+        }
+        catch (err) {
+            if (err.code === 'ENOENT') {
+                // Create file and create default cells
+            }
+            else {
+                throw err;
+            }
+        }
     }));
     router.post('/cells', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Take the list of cells from the req obj
